@@ -14,6 +14,8 @@ private const val BASE_URL = "https://api.covidtracking.com/v1/"
 private const val TAG = "RetrofitMainActivity"
 
 class RetrofitMainActivity : AppCompatActivity() {
+    private lateinit var nationalDailyData: List<CovidData>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_retrofit_main)
@@ -38,7 +40,9 @@ class RetrofitMainActivity : AppCompatActivity() {
                     Log.w(TAG, "Did not receive a valid response body")
                     return
                 }
-                nationalDailyData = nationalData
+                nationalDailyData = nationalData.reversed()
+                Log.i(TAG, "Update graph with national data")
+                // TODO: Update the graph with national data
             }
 
             override fun onFailure(call: Call<List<CovidData>>, t: Throwable) {
