@@ -2,6 +2,8 @@ package com.inti.covidapp
 import retrofit2.http.GET
 import retrofit2.Call
 
+//this page is to call the REST api for the data relating to covid cases in the US
+
 interface CovidService{
 
     @GET("us/daily.json")
