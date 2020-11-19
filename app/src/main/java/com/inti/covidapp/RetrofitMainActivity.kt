@@ -19,6 +19,7 @@ private const val BASE_URL = "https://api.covidtracking.com/v1/"
 private const val TAG = "RetrofitMainActivity"
 
 class RetrofitMainActivity : AppCompatActivity() {
+    private lateinit var adapter: CovidSparkAdapter
     private lateinit var perStateDailyData: Map<String, List<CovidData>>
     private lateinit var nationalDailyData: List<CovidData>
 
@@ -46,6 +47,9 @@ class RetrofitMainActivity : AppCompatActivity() {
                     Log.w(TAG, "Did not receive a valid response body")
                     return
                 }
+
+                //to allow the radio buttons to be more interactive based on what user pressed
+                setupEventListeners()
                 nationalDailyData = nationalData.reversed()
                 Log.i(TAG, "Update graph with national data")
                 // TODO: Update the graph with national data
@@ -80,9 +84,20 @@ class RetrofitMainActivity : AppCompatActivity() {
         })
     }
 
+    private fun setupEventListeners() {
+        //add listener for the user scrubbing on the chart
+        sparkView.isScrubEnabled = true
+        sparkView.setScrubListener { itemData ->
+            if (itemData is CovidData) {
+                updateIntoForDate(itemData)
+            }
+        }
+        //TODO: respond to radio button selected events
+    }
+
     private fun updateDisplayWithData(dailyData: List<CovidData>) {
         // Create Spark Adapter with data
-        val adapter = CovidSparkAdapter(dailyData)
+        adapter = CovidSparkAdapter(dailyData)
         sparkView.adapter = adapter
         //Update radio buttons to select positive cases and max time by default
         radioButtonPositive.isChecked = true
@@ -92,7 +107,12 @@ class RetrofitMainActivity : AppCompatActivity() {
     }
 
     private fun updateIntoForDate(covidData: CovidData) {
-        tvMetricLabel.text = NumberFormat.getInstance().format(covidData.positiveIncrease)
+        val numCases = when (adapter.metric){
+            Metric.NEGATIVE -> covidData.negativeIncrease
+            Metric.POSITIVE -> covidData.positiveIncrease
+            Metric.DEATH -> covidData.deathIncrease
+        }
+        tvMetricLabel.text = NumberFormat.getInstance().format(numCases)
         val outputDateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.US)
         tvDateLabel.text = outputDateFormat.format(covidData.dateChecked)
 
