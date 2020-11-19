@@ -52,7 +52,7 @@ class RetrofitMainActivity : AppCompatActivity() {
                 setupEventListeners()
                 nationalDailyData = nationalData.reversed()
                 Log.i(TAG, "Update graph with national data")
-                // TODO: Update the graph with national data
+                // Update the graph with national data
                 updateDisplayWithData(nationalDailyData)
             }
 
@@ -89,10 +89,32 @@ class RetrofitMainActivity : AppCompatActivity() {
         sparkView.isScrubEnabled = true
         sparkView.setScrubListener { itemData ->
             if (itemData is CovidData) {
-                updateIntoForDate(itemData)
+                updateInfoForDate(itemData)
             }
         }
-        //TODO: respond to radio button selected events
+        //Respond to radio button selected events
+        radioGroupTimeSelection.setOnCheckedChangeListener{_, checkedId ->
+            adapter.daysAgo = when(checkedId){
+                R.id.radioButtonWeek -> TimeScale.WEEK
+                R.id.radioButtonMonth -> TimeScale.MONTH
+                else -> TimeScale.MAX
+            }
+            adapter.notifyDataSetChanged()
+        }
+
+        radioGroupMetricSelection.setOnCheckedChangeListener{_, checkedId ->
+            when (checkedId) {
+                R.id.radioButtonPositive -> updateDisplayMetric(Metric.POSITIVE)
+                R.id.radioButtonNegative -> updateDisplayMetric(Metric.NEGATIVE)
+                R.id.radioButtonDeath -> updateDisplayMetric(Metric.DEATH)
+            }
+
+        }
+    }
+
+    private fun updateDisplayMetric(metric: Metric) {
+        adapter.metric = metric
+        adapter.notifyDataSetChanged()
     }
 
     private fun updateDisplayWithData(dailyData: List<CovidData>) {
@@ -103,11 +125,11 @@ class RetrofitMainActivity : AppCompatActivity() {
         radioButtonPositive.isChecked = true
         radioButtonMax.isChecked = true
         //Display metric for the most recent date
-        updateIntoForDate(dailyData.last())
+        updateInfoForDate(dailyData.last())
     }
 
-    private fun updateIntoForDate(covidData: CovidData) {
-        val numCases = when (adapter.metric){
+    private fun updateInfoForDate(covidData: CovidData) {
+        val numCases = when (adapter.metric) {
             Metric.NEGATIVE -> covidData.negativeIncrease
             Metric.POSITIVE -> covidData.positiveIncrease
             Metric.DEATH -> covidData.deathIncrease
