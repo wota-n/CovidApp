@@ -10,7 +10,7 @@
         android:id="@+id/tvSelectState"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="48dp"
         android:layout_marginTop="16dp"
         android:text="State"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -121,4 +121,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tvDateLabel"
         tools:text="4354" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
