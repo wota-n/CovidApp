@@ -7,9 +7,9 @@ public class CountryData {
             "IND", "USA", "MY", "AFG", "MF"
     };
 
-    public  static final int[] countryFlag = {
-
-            R.drawable.india, R.drawable.uk, R.drawable.malaysia, R.drawable.afganistan, R.drawable.maxico
-    };
+//    public  static final int[] countryFlag = {
+//
+//            R.drawable.india, R.drawable.uk, R.drawable.malaysia, R.drawable.afganistan, R.drawable.maxico
+//    };
 
 }
