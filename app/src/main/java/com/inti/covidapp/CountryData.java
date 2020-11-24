@@ -2,6 +2,8 @@ package com.inti.covidapp;
 
 public class CountryData {
 
+    //this code is no longer in use
+
     public  static final String[] countryNames = {
 
             "IND", "USA", "MY", "AFG", "MF"
