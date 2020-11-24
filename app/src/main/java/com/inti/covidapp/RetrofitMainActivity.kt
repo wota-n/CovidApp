@@ -3,10 +3,10 @@ package com.inti.covidapp
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import com.google.gson.GsonBuilder
+import com.robinhood.ticker.TickerUtils
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -103,6 +103,8 @@ class RetrofitMainActivity : AppCompatActivity() {
     }
 
     private fun setupEventListeners() {
+        tickerView.setCharacterLists(TickerUtils.provideNumberList())
+
         //add listener for the user scrubbing on the chart
         sparkView.isScrubEnabled = true
         sparkView.setScrubListener { itemData ->
@@ -139,7 +141,7 @@ class RetrofitMainActivity : AppCompatActivity() {
         }
         @ColorInt val colorInt = ContextCompat.getColor(this, colorRes)
         sparkView.lineColor = colorInt
-        tvMetricLabel.setTextColor(colorInt)
+        tickerView.setTextColor(colorInt)
 
         //Update metric on the adapter
         adapter.metric = metric
@@ -168,7 +170,7 @@ class RetrofitMainActivity : AppCompatActivity() {
             Metric.POSITIVE -> covidData.positiveIncrease
             Metric.DEATH -> covidData.deathIncrease
         }
-        tvMetricLabel.text = NumberFormat.getInstance().format(numCases)
+        tickerView.text = NumberFormat.getInstance().format(numCases)
         val outputDateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.US)
         tvDateLabel.text = outputDateFormat.format(covidData.dateChecked)
 
